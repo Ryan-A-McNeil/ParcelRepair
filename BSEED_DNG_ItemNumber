@@ -1,0 +1,44 @@
+Private Sub CommandButton2_Click()
+
+
+
+    '***** Declare variables
+    Dim RevItemNum As String          '***** Output (revised) Item Number value
+    Dim AllItems As Range             '***** Input Item Number field
+    Dim ItemNum As String             '***** Input Item Number value (Remove?? Same as c.Value??)
+    Dim NewItems As Range             '***** Output (revised) Item Number field
+    Dim Position As Long              '***** Character position of punctuation
+    Dim RowNumber As Long             '***** Number of rows in input field
+    Dim LeadingChars As String        '***** Leading zeros to be added to input Item Number to create output (revised) Item Number
+    Dim NumLeaders As Long            '***** Count of leading zeros needed to add to input Item Number for output (revised) Item Number to be appropriate length 
+    
+    '***** Define objects
+    With Sheets("DNGprclRepair")                              '***** Replace with the name of the active sheet here
+        RowNumber = .Range("A" & .Rows.Count).End(xlUp).Row     '***** Counts the number of input rows
+    End With
+    Set AllItems = Range("A2", ("A" & CStr(RowNumber)))       '***** Input Item Number Range
+    Set NewItems = Range("B2", ("B" & CStr(RowNumber)))       '***** Output Item Number Range
+    NewItems.NumberFormat = "@"                               '***** Sets Output Item Number field format to text
+
+    '***** Process function
+    For Each c In AllItems
+        If InStr(c.Value, ".") <> 0 Then            '***** Looks for a decimal point in the Item Number
+            Position = InStr(c.Value, ".")            '***** Identifies the position of the decimal point
+            NumLeaders = (7 - Position)               '***** Counts the number of leading zeros necessary to expand Item Number string length left of the decimal to six
+            LeadingChars = String(NumLeaders, "0")    '***** Returns a string of zeros of the length specified above
+            RevItemNum = LeadingChars & c.Value       '***** Returns a revised Item Number by combining the string of leading zeros with the original Item Number
+        ElseIf InStr(c.Value, "-") <> 0 Then        '***** If no decimal point in the Item Number, looks for a dash
+            Position = InStr(c.Value, "-")            '***** Identifies the position of the dash
+            NumLeaders = (7 - Position)               '***** Counts the number of leading zeros necessary to expand Item Number string length left of the dash to six
+            LeadingChars = String(NumLeaders, "0")    '***** Returns a string of zeros of the length specified above
+            RevItemNum = LeadingChars & c.Value       '***** Returns a revised Item Number by combining the string of leading zeros with the original Item Number
+        Else
+            RevItemNum = "Check Value: " & c.Value  '***** If no decimal point or dash in Item Number, input Item Number is returned prefaced by "Check Value: "
+        End If
+        
+    c.Offset(0, 1).Value = RevItemNum             '***** Returns value of the revised Item Number in the field right adjacent the input Item Number
+    
+    Next                                          '***** Moves to next record in input Item Number field
+    
+
+End Sub
