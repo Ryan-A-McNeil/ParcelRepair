@@ -1,4 +1,7 @@
-Private Sub CommandButton2_Click()
+'***** This script takes an input value of a parcel's Item Number from the City of Detroit's BSEED Dangerous Buildings list and adds the correct number of leading zeros which, when prefaced by the Ward Number, produces a valid City of Detroit parcel number.
+
+
+Private Sub CommandButton2_Click()      '***** Script run in Excel via an ActiveX Command Button embedded in the worksheet
 
 
 
@@ -13,7 +16,7 @@ Private Sub CommandButton2_Click()
     Dim NumLeaders As Long            '***** Count of leading zeros needed to add to input Item Number for output (revised) Item Number to be appropriate length 
     
     '***** Define objects
-    With Sheets("DNGprclRepair")                              '***** Replace with the name of the active sheet here
+    With Sheets("DNGprclRepair")                              '***** Replace "DNGprclRepair" with the name of the active worksheet
         RowNumber = .Range("A" & .Rows.Count).End(xlUp).Row     '***** Counts the number of input rows
     End With
     Set AllItems = Range("A2", ("A" & CStr(RowNumber)))       '***** Input Item Number Range
