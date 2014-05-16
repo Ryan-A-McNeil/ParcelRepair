@@ -1,0 +1,58 @@
+Sub RevPrclNum()
+'***** Declare variables
+Dim RevPrclNum As String
+Dim AllPrcls As Range
+Dim PrclNum As String
+Dim NewPrcls As Range
+Dim Position As Long
+Dim RowNumber As Long
+Dim LeadingChars As String
+Dim NumLeaders As Long
+Dim LenInPrcl As Long
+    
+'***** Define objects
+With Sheets("RFP_05152014")  '*****Replace "Active List" with name of active sheet
+    RowNumber = .Range("B" & .Rows.Count).End(xlUp).Row
+    End With
+Set AllPrcls = Range("B2", ("B" & CStr(RowNumber))) '*****Replace "J" with column with Parcel Numbers to be repaired
+Set NewPrcls = Range("C2", ("C" & CStr(RowNumber))) '*****Replace "K" with column to house repaired PNs
+NewPrcls.NumberFormat = "@"
+
+'***** Process function
+For Each c In AllPrcls
+    If InStr(c.Value, "/") <> 0 Then
+        RevPrclNum = "****CHECK****" & c.Value
+    ElseIf InStr(c.Value, ".") <> 0 Then
+        Position = InStr(c.Value, ".")
+        If Position <> 9 Then
+            NumLeaders = (9 - Position)
+            LeadingChars = String(NumLeaders, "0")
+            RevPrclNum = LeadingChars & c.Value
+        Else
+            RevPrclNum = c.Value
+        End If
+    ElseIf InStr(c.Value, "-") <> 0 Then
+        Position = InStr(c.Value, "-")
+        If Position <> 9 Then
+            NumLeaders = (9 - Position)
+            LeadingChars = String(NumLeaders, "0")
+            RevPrclNum = LeadingChars & c.Value
+        Else
+            RevPrclNum = c.Value
+        End If
+    ElseIf Len(c.Value) = 8 Then
+        RevPrclNum = c.Value & "."
+    ElseIf Len(c.Value) > 8 Then
+        RevPrclNum = Left(c.Value, 8) & "-" & Mid(c.Value, 9)
+    Else
+        LenInPrcl = Len(c.Value)
+        NumLeaders = (8 - LenInPrcl)
+        LeadingChars = String(NumLeaders, "0")
+        RevPrclNum = LeadingChars & c.Value & "."
+    End If
+        
+c.Offset(0, 1).Value = RevPrclNum
+    
+Next
+
+End Sub
