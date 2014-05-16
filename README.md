@@ -3,6 +3,12 @@ ParcelRepair
 
 Transforms a City of Detroit parcel number (or its constituent ward and item numbers) into the format prescribed by the assessment units in Detroit and Wayne County.
 
+The script will fix most common formatting errors (i.e. insufficient number of leading zeroes and missing punctuation), but cannot correct human error. Once I’ve run the script, I’ll usually compare the results against the assessor’s parcel numbers to identify any rogue mismatched parcel numbers. These are usually limited to data entry problems (e.g. digit transposition) or selection of an alternate tax ID for a given address, and can generally be corrected by comparing addresses to a reference data set (e.g. assessor’s parcel and address list). Any revised parcel numbers without a match on this list will need to be addressed on a case-by-case basis, but these are typically limited to a manageable number.
+
+This method expects full parcel numbers (stored as strings, not numbers) for the input arguments. If your data have only Ward and Item numbers, you’ll need to concatenate those fields prior to running the transformation. If your Ward numbers do not have a leading zero, that is not a problem as the script will correct that as necessary. Output parcel numbers will be formatted as string values.
+
+Be sure to update your worksheet and the columns within the code to reflect your data (these lines are commented to remind you).
+
 
 Mask Format
 -----------
